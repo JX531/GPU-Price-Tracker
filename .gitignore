@@ -1,1 +1,6 @@
 Scrape/plans
+Scrape/.env
+*.zip
+/Lambda stuff
+*.pyc
+/Scrape/__pycache__

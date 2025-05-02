@@ -1,5 +1,4 @@
 #Scraper for Amazon
-import datetime
 from bs4 import BeautifulSoup as bs
 import requests as rq
 import re
@@ -26,15 +25,12 @@ def findProduct(productName, limit = 10): #Takes in a string productName to sear
         links = soup.find_all("a", attrs={'class': 'a-link-normal s-line-clamp-4 s-link-style a-text-normal'})
 
         products = processLinks(links[:limit], session, webpage.url)
-
-        # for product in products:
-        #     if productName.upper() == product["Model"]:
-        #         print(product)
         
-        return [product for product in products if productName.upper() == product["Model"]]
+        return [product for product in products if productName == product["Model"]]
 
 def processLinks(links, session, referer=None):
     productInfos = []
+    seen_links = [] #to remove duplicate listings by their link
     for link in links:
         href = link.get('href') 
         if href is None:
@@ -74,31 +70,25 @@ def processLinks(links, session, referer=None):
                 
                 data[key] = value
             
-            date = str(datetime.date.today())
             if data["Model"] and data["VRAM"]:
                 title = productSoup.find("span", attrs={"class": "a-size-large product-title-word-break"}).get_text(strip=True)
 
                 cleanedPrice = re.sub(r'[^\d.]', '', price.get_text(strip=True)) #remove non digits from price string
                 data['Price'] = round(float(cleanedPrice), 2) #convert to float 2dp
 
-                data['Date'] = date
-
                 data['Link'] = shorten(productLink)
                 
                 data['Title'] = title
 
-                productInfos.append(data)
+                if data['Link'] not in seen_links:
+                    seen_links.append(data['Link'])
+                    productInfos.append(data)
             
         except Exception as e:
             print(f"Error processing {href}: {str(e)}")
             continue
 
     return productInfos
-
-#findProduct("rtx 5070")
-
-#'Model', 'Brand', 'VRAM', 'Price', 'Date', 'Link', 'Title'
-# {Link, Date}
 
 
 
