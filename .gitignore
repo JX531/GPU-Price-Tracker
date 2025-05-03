@@ -4,3 +4,4 @@ Scrape/.env
 /Lambda stuff
 *.pyc
 /Scrape/__pycache__
+*.pyc

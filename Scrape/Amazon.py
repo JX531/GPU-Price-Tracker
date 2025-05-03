@@ -2,13 +2,19 @@
 from bs4 import BeautifulSoup as bs
 import requests as rq
 import re
+import time
+
 from Helpers.Standardise import standardiseModel
 from Helpers.ShortenURL import shorten
 from Helpers.GetVRAM import getVram
 
-userAgent = r"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
-language = 'en-US, en;q=0.5'
-HEADERS = ({'User-Agent': userAgent, 'Accept-Language': language})
+from fake_useragent import UserAgent
+ua = UserAgent()
+HEADERS = {'User-Agent': ua.random, 'Accept-Language': 'en-US,en;q=0.5'}
+
+# userAgent = r"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+# language = 'en-US, en;q=0.5'
+# HEADERS = ({'User-Agent': userAgent, 'Accept-Language': language})
 referer = None
 
 def findProduct(productName, limit = 10): #Takes in a string productName to search
@@ -19,13 +25,14 @@ def findProduct(productName, limit = 10): #Takes in a string productName to sear
 
         #Get Webpage soup
         webpage = session.get(URL)
+        print("webpage: ", webpage)
         soup = bs(webpage.content, 'html.parser')
-        
+
         #Get Product Page soup
         links = soup.find_all("a", attrs={'class': 'a-link-normal s-line-clamp-4 s-link-style a-text-normal'})
-
+        print("links found:", len(links))
+        time.sleep(1)
         products = processLinks(links[:limit], session, webpage.url)
-        
         return [product for product in products if productName == product["Model"]]
 
 def processLinks(links, session, referer=None):
@@ -33,12 +40,14 @@ def processLinks(links, session, referer=None):
     seen_links = [] #to remove duplicate listings by their link
     for link in links:
         href = link.get('href') 
+        time.sleep(1)
         if href is None:
             continue
 
         try:
             productLink = f'https://www.amazon.sg{href}'
             productPage = session.get(productLink, headers={'Referer': referer})
+            print("productPage: ", productPage)
             productPage.raise_for_status()
             productSoup = bs(productPage.content, 'html.parser')
 
@@ -81,8 +90,11 @@ def processLinks(links, session, referer=None):
                 data['Title'] = title
 
                 if data['Link'] not in seen_links:
+                    print("added: ", data['Link'])
                     seen_links.append(data['Link'])
                     productInfos.append(data)
+                else:
+                    print("did not add: ", data['Link'])
             
         except Exception as e:
             print(f"Error processing {href}: {str(e)}")
@@ -90,5 +102,4 @@ def processLinks(links, session, referer=None):
 
     return productInfos
 
-
-
+#print("output: ", findProduct("RTX 5070 TI"))

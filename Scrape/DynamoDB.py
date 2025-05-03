@@ -1,6 +1,7 @@
 from Amazon import findProduct
 from datetime import datetime
 from decimal import Decimal
+from zoneinfo import ZoneInfo
 
 import boto3
 from boto3.dynamodb.conditions import Attr
@@ -34,7 +35,7 @@ def uploadDailyAverage(Model, dailyModelData, Today):
 
     if NumListings == 0:
         print(f"No Data for {Model} on {Today}")
-        AvgPrice = 0
+        return
 
     else:
         AvgPrice = Decimal(str(round(sum(item["Price"] for item in dailyModelData) / NumListings, 2)))
@@ -90,7 +91,7 @@ def uploadRawListings(Model, dailyModelData, Today):
             print(f"Error uploading raw listings for {Model} on {Today}: {e}")
 
 
-def lambda_handler(event, context):
+def routine():
     Today = datetime.today().strftime("%Y-%m-%d")
     response = scrapeTargets.scan(FilterExpression=Attr('ACTIVE').eq(True))
     targets = response['Items']
@@ -98,5 +99,6 @@ def lambda_handler(event, context):
     for target in targets:
         targetModel = target['Model'].upper()
         data = findProduct(targetModel)
-        uploadDailyAverage(targetModel, data, Today)
-        uploadRawListings(targetModel, data, Today)
+        # uploadDailyAverage(targetModel, data, Today)
+        # uploadRawListings(targetModel, data, Today)
+
