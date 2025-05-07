@@ -1,5 +1,6 @@
 from Amazon import findProduct
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from decimal import Decimal
 import os
 import boto3
@@ -20,16 +21,26 @@ scrapeTargets = dynamodb.Table(os.environ['ITEMS_TO_SEARCH_TABLE'])
 
 
 def uploadDailyAverage(Model, dailyModelData, Today):
-    NumListings = len(dailyModelData)
+    '''
+    Uploads the average price of a model for the day to the relevant DynamoDB table
+    Input :
+    Model - String, which model you are uploading for e.g "RTX 5070 TI"
+    daikyModelData - Array of objects containing product data, from functions in Amazon.py scraper
+    Today - String, date of today
 
-    if NumListings == 0:
+    Output : None
+    '''
+
+    NumListings = len(dailyModelData) #find number of listings
+
+    if NumListings == 0: #no data today
         logger.info(f"No Data for {Model} on {Today}")
-        AvgPrice = Decimal(0)
+        return
 
     else:
-        AvgPrice = Decimal(str(round(sum(item["Price"] for item in dailyModelData) / NumListings, 2)))
+        AvgPrice = Decimal(str(round(sum(item["Price"] for item in dailyModelData) / NumListings, 2))) #calculate average price, converted to decimal for dynamoDB
 
-    try:
+    try: #upload to dynamoDB
         tableDaily.put_item(
             Item={
                 'Model': Model,
@@ -47,18 +58,27 @@ def uploadDailyAverage(Model, dailyModelData, Today):
 
 #'Model', 'Brand', 'VRAM', 'Price', 'Date', 'Link', 'Title'
 def uploadRawListings(Model, dailyModelData, Today):
-    NumListings = len(dailyModelData)
+    '''
+    Uploads the cheapest 3 listings for the model for today
+    Input :
+    Model - String, which model you are uploading for e.g "RTX 5070 TI"
+    daikyModelData - Array of objects containing product data, from functions in Amazon.py scraper
+    Today - String, date of today
 
-    if NumListings == 0:
+    Output : None
+    '''
+    NumListings = len(dailyModelData) #find number of listings
+
+    if NumListings == 0: #no data today
         logger.info(f"No Data for {Model} on {Today}")
         return 
     
     else:
-        dailyModelData.sort(key=lambda item: item["Price"])
-        cheapest3 = dailyModelData[:3]
-        expiry = int(datetime.today().timestamp()) + (24 * 3600)
+        dailyModelData.sort(key=lambda item: item["Price"]) #Sort by Price, ascending
+        cheapest3 = dailyModelData[:3] #slice the cheapest 3 from array
+        expiry = int(datetime.now(ZoneInfo("Asia/Singapore")).timestamp()) + (24 * 3600) #calculate TTL, using SG timezone
 
-        try:
+        try: #upload with batch writer
             with cheapestDaily.batch_writer() as batch:
                 for item in cheapest3:
                     batch.put_item(
@@ -79,19 +99,23 @@ def uploadRawListings(Model, dailyModelData, Today):
 
 
 def lambda_handler(event, context):
-    Today = datetime.today().strftime("%Y-%m-%d")
+    Today = datetime.now(ZoneInfo("Asia/Singapore")).strftime("%Y-%m-%d") #today date, using SG timezone
 
     try:
-        response = scrapeTargets.scan(FilterExpression=Attr('ACTIVE').eq(True))
+        #get targets to scrape from DynamoDB table e.g "RTX 5070 TI"
+        response = scrapeTargets.scan(FilterExpression=Attr('ACTIVE').eq(True)) 
         targets = response['Items']
     except Exception as e:
         logger.error(f"Failed to fetch scrape targets: {str(e)}")
         return {"status": "failed", "error": "Target scan failed"}
 
+    #proceed to scrape for each target
     for target in targets:
         try:
-            targetModel = target['Model'].upper()
-            data = findProduct(targetModel)
+            targetModel = target['Model'].upper() #Get the Model we are scraping for
+            data = findProduct(targetModel) #Scrape for it
+
+            #upload the data
             uploadDailyAverage(targetModel, data, Today)
             uploadRawListings(targetModel, data, Today)
 
