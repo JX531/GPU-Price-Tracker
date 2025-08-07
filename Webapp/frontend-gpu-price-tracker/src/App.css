@@ -1,0 +1,152 @@
+.App {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-color: #2F4050;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.Sidebar {
+  height: 100%;
+  width: 15vw;
+  background-color: #2F4050;
+  flex-shrink: 0;
+
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: large;
+  color: white;
+  text-align:center;
+}
+
+.SidebarList {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  height: auto;
+  padding: 0;
+  width: 100%;
+}
+
+.SidebarList .row {
+  height: 50px;
+  width: auto;
+  border: 1px solid black;
+  color: white;
+
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: large;
+  align-content: center;
+  text-align:left;
+  padding-left: 10%;
+}
+
+.SidebarList .row:hover{
+  cursor: pointer;
+  background-color: #293846;
+}
+
+.SidebarList  #active{
+  background-color: #293846;
+}
+
+.Content {
+  background-color: #383333;  /* Optional styling */
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  width: 70vw;   /* or any fixed size */
+  max-width: 90%;
+  
+}
+
+.ChartContainer {
+  box-sizing: border-box;
+  background-color: #dbd3d3;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  width: 40vw;
+  max-width: 90%;
+  height: 40vh;
+  max-height: 90%;
+}
+
+.TableContainer {
+  box-sizing: border-box;
+  background-color: #dbd3d3;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  width: 40vw;
+  max-width: 90%;
+  max-height: 50vh;
+  overflow-y: auto;
+  margin-top: 2rem;
+}
+
+.DataTable {
+  width: 100%;
+  font-size: large;
+}
+
+.DataTable th {
+  position: sticky;
+  font-weight: bold;
+  top: 0;
+  background-color: #d4c4c4;
+}
+
+.DataTable td {
+  border-bottom: 1px solid #c7a7a7;
+}
+
+.DataTable tr:hover {
+  background-color: #e3b3b3;
+}
+
+.select {
+  background-color: #dbd3d3;
+  border-radius: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.UserBar {
+  height: 100%;
+  width: 15vw;
+  background-color: #2F4050;
+  flex-shrink: 0;
+
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: large;
+  color: white;
+  text-align:center;
+}
+
+.UserBar pre{
+  height: 50px;
+  width: auto;
+  color: white;
+
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: large;
+  align-content: center;
+  text-align:left;
+  padding-left: 10%;
+}
+
+.UserBar button{
+  font-size: 1rem;
+  padding: 8px 12px;
+  margin-right: 10px;
+  margin-top: 2rem;
+  background-color: #3b5998;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
