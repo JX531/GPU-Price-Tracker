@@ -5,3 +5,4 @@ Scrape/.env
 *.pyc
 /Scrape/__pycache__
 *.pyc
+/Webapp/Lambda stuff
