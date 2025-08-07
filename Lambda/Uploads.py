@@ -83,10 +83,10 @@ def uploadDailyAverage(Model, dailyModelData, Today):
             CacheControl='max-age=86400'  #24h cache
         )
 
-        logger.info(f"Uploaded average for {Model} on {Today}, averaging at {AvgPrice} across {NumListings} Listings")
+        logger.info(f"Uploaded daily average  to S3 for {Model} on {Today}, averaging at {AvgPrice} across {NumListings} Listings")
 
     except Exception as e:
-        logger.error(f"Failed to upload daily average for {Model} on {Today}: {str(e)}")
+        logger.error(f"Failed to upload daily average  to S3 for {Model} on {Today}: {str(e)}")
 
 
 def uploadRawListings(Model, dailyModelData, Today):
@@ -111,6 +111,7 @@ def uploadRawListings(Model, dailyModelData, Today):
         cheapest3 = dailyModelData[:3] #slice the cheapest 3 from array
         expiry = int(datetime.now(ZoneInfo("Asia/Singapore")).timestamp()) + (24 * 3600) #calculate TTL, using SG timezone
 
+        #Update DynamoDB Table
         try: #upload with batch writer
             with cheapestDaily.batch_writer() as batch:
                 for item in cheapest3:
@@ -125,7 +126,63 @@ def uploadRawListings(Model, dailyModelData, Today):
                             'Expiry': expiry
                         }
                     )
-            logger.info(f"Uploaded cheapest 3 listings for {cheapest3[0]['Model']} on {Today}")
+            logger.info(f"Uploaded cheapest daily to DynamoDB for {cheapest3[0]['Model']} on {Today}")
 
         except Exception as e:
-            logger.error(f"Error uploading raw listings for {Model} on {Today}: {e}")
+            logger.error(f"Error uploading cheapest daily to DynamoDB for {Model} on {Today}: {e}")
+        
+        #Update S3 jsons
+        try:
+            try:
+                response = s3.get_object(Bucket = S3Bucket, Key = f"data/{Model}_cheapestDaily.json")
+                existingData = json.load(response['Body'])
+            
+            except Exception as e:
+                if "NoSuchKey" in str(e):
+                    logger.info(f"Creating new cheapestDaily file for {Model}")
+                    existingData = {}
+                else:
+                    logger.error(f"S3 cheapestDaily get failed for {Model} on {Today}: {str(e)}")
+                
+                lastUpdated = existingData.get('Date', None)
+                if lastUpdated != Today: #Wipe old listings and write new for the day
+                    existingData['Date'] = Today #date
+                    existingData['Listings'] = {} #listings
+
+                    for item in cheapest3:
+                        existingData['Listings'][item['Link']] = {
+                                'Model': Model,
+                                'Brand': item['Brand'],
+                                'VRAM': item['VRAM'],
+                                'Price': Decimal(str(item['Price'])),
+                                'Link': item['Link'],
+                                'Title': item['Title'][:500],
+                        }
+                    
+                else: #Same day, add new listings
+                    for item in cheapest3:
+                        existingData['Listings'][item['Link']] = {
+                                'Model': Model,
+                                'Brand': item['Brand'],
+                                'VRAM': item['VRAM'],
+                                'Price': Decimal(str(item['Price'])),
+                                'Link': item['Link'],
+                                'Title': item['Title'][:500],
+                        }
+                
+                #Encode back to Json
+                updatedData = json.dumps(existingData, indent=2, cls= DecimalToFloat)
+
+                #Push updated data back to S3
+                s3.put_object(
+                    Bucket = S3Bucket,
+                    Key = f"data/{Model}_cheapestDaily.json",
+                    Body = updatedData,
+                    ContentType = 'application/json',
+                    CacheControl='max-age=86400'  #24h cache
+                )
+                
+                logger.info(f"Uploaded ccheapest daily to S3 for {cheapest3[0]['Model']} on {Today}")
+        
+        except Exception as e:
+            logger.error(f"Failed to upload cheapest daily to S3 for {Model} on {Today}: {str(e)}")
