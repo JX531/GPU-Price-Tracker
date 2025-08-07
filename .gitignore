@@ -6,3 +6,4 @@ Scrape/.env
 /Scrape/__pycache__
 *.pyc
 /Webapp/Lambda stuff
+Lambda/lambda_function OLD.py
