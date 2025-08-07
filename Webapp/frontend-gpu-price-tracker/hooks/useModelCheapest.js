@@ -5,7 +5,7 @@ function useModelCheapest(selectedProduct) {
 
     //fetch model data once each time selected product is changed
     useEffect(() => {
-        fetch(`https://d3pprnqmx0m8l1.cloudfront.net/data/${selectedProduct}_cheapestDaily.json`)
+        fetch(`https://d3pprnqmx0m8l1.cloudfront.net/data/dailyCheapest/${selectedProduct}_cheapestDaily.json`)
         .then(res => res.json())
         //convert from object to array for easier data presentation
         .then(objectData => {
