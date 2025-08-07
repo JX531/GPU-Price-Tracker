@@ -144,45 +144,45 @@ def uploadRawListings(Model, dailyModelData, Today):
                 else:
                     logger.error(f"S3 cheapestDaily get failed for {Model} on {Today}: {str(e)}")
                 
-                lastUpdated = existingData.get('Date', None)
-                if lastUpdated != Today: #Wipe old listings and write new for the day
-                    existingData['Date'] = Today #date
-                    existingData['Listings'] = {} #listings
+            lastUpdated = existingData.get('Date', None)
+            if lastUpdated != Today: #Wipe old listings and write new for the day
+                existingData['Date'] = Today #date
+                existingData['Listings'] = {} #listings
 
-                    for item in cheapest3:
-                        existingData['Listings'][item['Link']] = {
-                                'Model': Model,
-                                'Brand': item['Brand'],
-                                'VRAM': item['VRAM'],
-                                'Price': Decimal(str(item['Price'])),
-                                'Link': item['Link'],
-                                'Title': item['Title'][:500],
-                        }
-                    
-                else: #Same day, add new listings
-                    for item in cheapest3:
-                        existingData['Listings'][item['Link']] = {
-                                'Model': Model,
-                                'Brand': item['Brand'],
-                                'VRAM': item['VRAM'],
-                                'Price': Decimal(str(item['Price'])),
-                                'Link': item['Link'],
-                                'Title': item['Title'][:500],
-                        }
+                for item in cheapest3:
+                    existingData['Listings'][item['Link']] = {
+                            'Model': Model,
+                            'Brand': item['Brand'],
+                            'VRAM': item['VRAM'],
+                            'Price': Decimal(str(item['Price'])),
+                            'Link': item['Link'],
+                            'Title': item['Title'][:500],
+                    }
                 
-                #Encode back to Json
-                updatedData = json.dumps(existingData, indent=2, cls= DecimalToFloat)
+            else: #Same day, add new listings
+                for item in cheapest3:
+                    existingData['Listings'][item['Link']] = {
+                            'Model': Model,
+                            'Brand': item['Brand'],
+                            'VRAM': item['VRAM'],
+                            'Price': Decimal(str(item['Price'])),
+                            'Link': item['Link'],
+                            'Title': item['Title'][:500],
+                    }
+            
+            #Encode back to Json
+            updatedData = json.dumps(existingData, indent=2, cls= DecimalToFloat)
 
-                #Push updated data back to S3
-                s3.put_object(
-                    Bucket = S3Bucket,
-                    Key = f"data/{Model}_cheapestDaily.json",
-                    Body = updatedData,
-                    ContentType = 'application/json',
-                    CacheControl='max-age=86400'  #24h cache
-                )
-                
-                logger.info(f"Uploaded ccheapest daily to S3 for {cheapest3[0]['Model']} on {Today}")
+            #Push updated data back to S3
+            s3.put_object(
+                Bucket = S3Bucket,
+                Key = f"data/{Model}_cheapestDaily.json",
+                Body = updatedData,
+                ContentType = 'application/json',
+                CacheControl='max-age=86400'  #24h cache
+            )
+            
+            logger.info(f"Uploaded ccheapest daily to S3 for {cheapest3[0]['Model']} on {Today}")
         
         except Exception as e:
             logger.error(f"Failed to upload cheapest daily to S3 for {Model} on {Today}: {str(e)}")
