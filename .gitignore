@@ -9,3 +9,6 @@ Scrape/.env
 Lambda/lambda_function OLD.py
 /Webapp/frontend-gpu-price-tracker/public/data
 /node_modules
+/Scrape/__pycache__
+package-lock.json
+package.json
