@@ -54,7 +54,7 @@ def uploadDailyAverage(Model, dailyModelData, Today):
     try: 
         #Pull existing data from S3
         try:
-            response = s3.get_object(Bucket = S3Bucket, Key = f"data/{Model}.json")
+            response = s3.get_object(Bucket = S3Bucket, Key = f"data/dailyAverages/{Model}_dailyAverage.json")
             existingData = json.load(response['Body'])
         
         except Exception as e:
@@ -77,7 +77,7 @@ def uploadDailyAverage(Model, dailyModelData, Today):
         #Push updated data back to S3
         s3.put_object(
             Bucket = S3Bucket,
-            Key = f"data/{Model}.json",
+            Key = f"data/dailyAverages/{Model}_dailyAverage.json",
             Body = updatedData,
             ContentType = 'application/json',
             CacheControl='max-age=86400'  #24h cache
@@ -134,7 +134,7 @@ def uploadRawListings(Model, dailyModelData, Today):
         #Update S3 jsons
         try:
             try:
-                response = s3.get_object(Bucket = S3Bucket, Key = f"data/{Model}_cheapestDaily.json")
+                response = s3.get_object(Bucket = S3Bucket, Key = f"data/dailyCheapest/{Model}_dailyCheapest.json")
                 existingData = json.load(response['Body'])
             
             except Exception as e:
@@ -176,13 +176,13 @@ def uploadRawListings(Model, dailyModelData, Today):
             #Push updated data back to S3
             s3.put_object(
                 Bucket = S3Bucket,
-                Key = f"data/{Model}_cheapestDaily.json",
+                Key = f"data/dailyCheapest/{Model}_dailyCheapest.json",
                 Body = updatedData,
                 ContentType = 'application/json',
                 CacheControl='max-age=86400'  #24h cache
             )
             
-            logger.info(f"Uploaded ccheapest daily to S3 for {cheapest3[0]['Model']} on {Today}")
+            logger.info(f"Uploaded heapest daily to S3 for {cheapest3[0]['Model']} on {Today}")
         
         except Exception as e:
             logger.error(f"Failed to upload cheapest daily to S3 for {Model} on {Today}: {str(e)}")
