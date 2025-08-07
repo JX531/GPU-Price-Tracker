@@ -7,3 +7,4 @@ Scrape/.env
 *.pyc
 /Webapp/Lambda stuff
 Lambda/lambda_function OLD.py
+/Webapp/frontend-gpu-price-tracker/public/data
