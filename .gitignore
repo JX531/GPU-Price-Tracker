@@ -1,18 +1,18 @@
 # === Project-Specific Ignore Rules ===
 Scrape/plans
-Scrape/.env
-/Scrape/__pycache__
-Webapp/Lambda stuff/
+Scrape/__pycache__/
+Webapp/Lambda\ stuff/
 Lambda/lambda_function OLD.py
 Webapp/frontend-gpu-price-tracker/public/data/
 Lambda_stuff/
 *.zip
 *.pyc
 
+# Ignore all .env files anywhere in the repo
+*.env
+
 # === Node.js / Frontend ===
 node_modules/
-package-lock.json
-package.json
 dist/
 dist-ssr/
 *.local
@@ -27,7 +27,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # === IDE / Editor ===
-.vscode/*
+.vscode/
 !.vscode/extensions.json
 .idea/
 .DS_Store
@@ -37,3 +37,9 @@ lerna-debug.log*
 *.sln
 *.sw?
 
+# === OS-specific ===
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
