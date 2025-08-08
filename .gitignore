@@ -1,14 +1,38 @@
+# === Project-Specific Ignore Rules ===
 Scrape/plans
 Scrape/.env
-*.zip
-/Lambda stuff
-*.pyc
-/Scrape/__pycache__
-*.pyc
-/Webapp/Lambda stuff
+Scrape/__pycache__/
+Webapp/Lambda stuff/
 Lambda/lambda_function OLD.py
-/Webapp/frontend-gpu-price-tracker/public/data
-/node_modules
-/Scrape/__pycache__
+Webapp/frontend-gpu-price-tracker/public/data/
+Lambda_stuff/
+*.zip
+*.pyc
+
+# === Node.js / Frontend ===
+node_modules/
 package-lock.json
 package.json
+dist/
+dist-ssr/
+*.local
+
+# === Logs ===
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# === IDE / Editor ===
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
