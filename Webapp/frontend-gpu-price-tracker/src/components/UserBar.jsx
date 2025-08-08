@@ -3,6 +3,11 @@ import signOutRedirect from '../../hooks/UserRedirects'
 
 function UserBar({auth}){
 
+    const handleLogout = async () =>{
+        await auth.removeUser(); 
+        signOutRedirect(); 
+    }
+
     if (auth.isAuthenticated){
         return(
             <div className='UserBar'>
@@ -11,7 +16,7 @@ function UserBar({auth}){
                     <pre> ID Token: {auth.user?.id_token.slice(-20)} </pre>
                     <pre> Access Token: {auth.user?.access_token.slice(-20)} </pre>
                     <pre> Refresh Token: {auth.user?.refresh_token.slice(-20)} </pre>
-                    <button onClick={() => auth.removeUser().then(signOutRedirect)}>Log Out</button> 
+                    <button onClick={handleLogout}>Log Out</button> 
                 </div>
             </div>
         )
