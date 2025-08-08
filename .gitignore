@@ -1,7 +1,7 @@
 # === Project-Specific Ignore Rules ===
 Scrape/plans
 Scrape/.env
-Scrape/__pycache__/
+/Scrape/__pycache__
 Webapp/Lambda stuff/
 Lambda/lambda_function OLD.py
 Webapp/frontend-gpu-price-tracker/public/data/
@@ -36,3 +36,4 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
