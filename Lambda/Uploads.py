@@ -157,6 +157,7 @@ def uploadRawListings(Model, dailyModelData, Today):
                             'Price': Decimal(str(item['Price'])),
                             'Link': item['Link'],
                             'Title': item['Title'][:500],
+                            'ImageLink': item['ImageLink'] #image link only in S3, for displaying on frontend
                     }
                 
             else: #Same day, add new listings
@@ -168,6 +169,7 @@ def uploadRawListings(Model, dailyModelData, Today):
                             'Price': Decimal(str(item['Price'])),
                             'Link': item['Link'],
                             'Title': item['Title'][:500],
+                            'ImageLink': item['ImageLink']
                     }
             
             #Encode back to Json

@@ -104,6 +104,13 @@ def processLinks(links, session, referer=None):
                 
                 data['Title'] = title 
 
+                #Locate its image link if possible too
+                imageTag = productSoup.find('img', attrs={'id': "landingImage"})
+                if imageTag:
+                    data['ImageLink'] = imageTag.get("src") or imageTag.get("data-old-hires")
+                else:
+                    data["ImageLink"] = "https://d3pprnqmx0m8l1.cloudfront.net/data/dailyCheapest/GPU_Placeholder.jpg"
+
                 if data['Link'] not in seen_links: #not a duplicate
                     #append data
                     seen_links.append(data['Link'])
