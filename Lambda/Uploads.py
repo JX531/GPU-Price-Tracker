@@ -184,7 +184,7 @@ def uploadRawListings(Model, dailyModelData, Today):
                 CacheControl='max-age=86400'  #24h cache
             )
             
-            logger.info(f"Uploaded heapest daily to S3 for {cheapest3[0]['Model']} on {Today}")
+            logger.info(f"Uploaded cheapest daily to S3 for {cheapest3[0]['Model']} on {Today}")
         
         except Exception as e:
             logger.error(f"Failed to upload cheapest daily to S3 for {Model} on {Today}: {str(e)}")
