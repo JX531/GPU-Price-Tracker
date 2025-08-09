@@ -7,6 +7,8 @@ import DataTable from './components/DataTable'
 import LineGraph from './components/LineGraph'
 import TimeSpanSelector from './components/TimeSpanSelector'
 
+import Card from './components/Card'
+
 //Hooks
 import useModels from '../hooks/useModels'
 import useModelData from '../hooks/useModelData'
@@ -40,17 +42,29 @@ function App() {
     <div className='App'>
       <Sidebar modelList={models} selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct}/>
       <div className="Content">
-        <div>
-          <TimeSpanSelector timeSpan={timeSpan} setTimeSpan={setTimeSpan}/>
-        </div>
-        
-        <div className="ChartContainer">
-          <LineGraph data={presentingData} />
+
+        <div className="DataContainer">
+          <div>
+            <TimeSpanSelector timeSpan={timeSpan} setTimeSpan={setTimeSpan}/>
+          </div>
+          
+          <div className="ChartContainer">
+            <LineGraph data={presentingData} />
+          </div>
+
+          <div className='TableContainer'>
+            <DataTable data={presentingData} />
+          </div>
         </div>
 
-        <div className='TableContainer'>
-          <DataTable data={presentingData} />
+        <div className="CardContainer">
+          {selectedProductCheapest.slice(0, 3).map((product, index) => (
+            <div key={index}>
+              <Card data={product} />
+            </div>
+          ))}
         </div>
+
       </div>
       <UserBar auth={auth}/>
     </div>
