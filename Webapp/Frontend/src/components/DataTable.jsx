@@ -9,7 +9,7 @@ function DataTable({data}){
       <thead>
         <tr>
           <th>No.</th>
-          <th>Date</th>
+          <th>Date (YYYY-MM-DD)</th>
           <th>Average Price</th>
           <th>No. Listings</th>
         </tr>
