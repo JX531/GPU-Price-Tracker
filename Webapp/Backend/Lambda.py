@@ -114,6 +114,3 @@ def lambda_handler(event, context):
                 "statusCode": 500,
                 "body": "Invalid Method"
             }
-        
-
-#THIS IS A TEST FOR GITHUB ACTION
