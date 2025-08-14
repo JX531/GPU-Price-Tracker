@@ -37,6 +37,9 @@ def lambda_handler(event, context):
             data = [{"Model": item["Model"], "Price": item["Price"]} for item in response.get('Items', [])]
             return {
                 "statusCode" : 200,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*"
+                },
                 "body": json.dumps(data, cls=DecimalToFloat)
             }
         
@@ -64,6 +67,9 @@ def lambda_handler(event, context):
 
                 return {
                     "statusCode" : 200,
+                    "headers": {
+                        "Access-Control-Allow-Origin": "*"
+                    },
                     "body": f"Successful {method} for {UserEmail}'s {Model} at ${Price}"
                 }
 
@@ -93,6 +99,9 @@ def lambda_handler(event, context):
 
                 return {
                     "statusCode" : 200,
+                    "headers": {
+                        "Access-Control-Allow-Origin": "*"
+                    },
                     "body": f"Successful {method} for {UserEmail}'s {Model}"
                 }
 
