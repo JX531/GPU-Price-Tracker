@@ -30,6 +30,9 @@ def lambda_handler(event, context):
             if not UserEmail:
                 return {
                     "statusCode": 400,
+                    "headers": {
+                        "Access-Control-Allow-Origin": "*"
+                    },
                     "body": "Missing UserEmail parameter"
                 }
         
@@ -47,6 +50,9 @@ def lambda_handler(event, context):
             logger.error(f"Failed {method}: {e}")
             return {
                 "statusCode": 500,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*"
+                },
                 "body": str(e)
             }
 
@@ -76,6 +82,9 @@ def lambda_handler(event, context):
             else:
                 return {
                     "statusCode": 400,
+                    "headers": {
+                        "Access-Control-Allow-Origin": "*"
+                    },
                     "body": "Missing UserEmail or Model or Price parameter"
                 }
 
@@ -83,6 +92,9 @@ def lambda_handler(event, context):
             logger.error(f"Failed {method}: {e}")
             return {
                 "statusCode": 500,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*"
+                },
                 "body": str(e)
             }
         
@@ -108,6 +120,9 @@ def lambda_handler(event, context):
             else:
                 return {
                     "statusCode": 400,
+                    "headers": {
+                        "Access-Control-Allow-Origin": "*"
+                    },
                     "body": "Missing UserEmail or Model parameter"
                 }
 
@@ -115,11 +130,17 @@ def lambda_handler(event, context):
             logger.error(f"Failed {method}: {e}")
             return {
                 "statusCode": 500,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*"
+                },
                 "body": str(e)
             }
 
     else:
         return {
                 "statusCode": 500,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*"
+                },
                 "body": "Invalid Method"
             }
