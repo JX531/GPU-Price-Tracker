@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-
+import { cloudfrontLink } from "../../links";
 function useModelCheapest(selectedProduct) {
     const [selectedProductCheapest, setSelectedProductCheapest] = useState([])
 
     //fetch model data once each time selected product is changed
     useEffect(() => {
-        fetch(`https://d3pprnqmx0m8l1.cloudfront.net/data/dailyCheapest/${selectedProduct}_dailyCheapest.json`)
+        fetch(`${cloudfrontLink}/data/dailyCheapest/${selectedProduct}_dailyCheapest.json`)
         .then(res => res.json())
         //convert from object to array for easier data presentation
         .then(objectData => {
