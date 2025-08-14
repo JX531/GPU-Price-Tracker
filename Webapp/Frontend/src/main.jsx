@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
+import { cloudfrontLink } from '../links.js'
 
 // index.js
 import React from "react";
@@ -11,7 +12,7 @@ import { AuthProvider } from "react-oidc-context";
 const cognitoAuthConfig = {
   authority: "https://cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_1Wgwj1Z1w",
   client_id: "576eeff7apnq0rd2llscgfidov",
-  redirect_uri: "https://d3pprnqmx0m8l1.cloudfront.net/",
+  redirect_uri: cloudfrontLink,
   response_type: "code",
   scope: "email openid phone",
 };

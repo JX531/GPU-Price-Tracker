@@ -7,13 +7,13 @@ import DataTable from './components/DataTable'
 import LineGraph from './components/LineGraph'
 import TimeSpanSelector from './components/TimeSpanSelector'
 
-import Card from './components/Card'
+import CheapestListingCards from './components/CheapestListingCards'
 
 //Hooks
-import useModels from '../hooks/useModels'
-import useModelData from '../hooks/useModelData'
-import useModelCheapest from '../hooks/useModelCheapest'
-import usePresentingData from '../hooks/usePresentingData'
+import useModels from './hooks/useModels'
+import useModelData from './hooks/useModelData'
+import useModelCheapest from './hooks/useModelCheapest'
+import usePresentingData from './hooks/usePresentingData'
 
 
 //Auth
@@ -58,11 +58,7 @@ function App() {
         </div>
 
         <div className="CardContainer">
-          {selectedProductCheapest.slice(0, 3).map((product, index) => (
-            <div key={index}>
-              <Card data={product} />
-            </div>
-          ))}
+            <CheapestListingCards selectedProductCheapest={selectedProductCheapest} />
         </div>
 
       </div>
