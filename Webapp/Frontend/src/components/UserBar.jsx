@@ -1,5 +1,5 @@
 import '../App.css'
-import signOutRedirect from '../../hooks/UserRedirects'
+import signOutRedirect from '../hooks/UserRedirects'
 
 function UserBar({auth}){
 
