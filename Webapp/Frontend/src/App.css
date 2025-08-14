@@ -138,7 +138,7 @@ body {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-size: large;
   align-content: center;
-  text-align:left;
+  text-align:center;
   padding-left: 10%;
 }
 
@@ -146,12 +146,16 @@ body {
   font-size: 1rem;
   padding: 8px 12px;
   margin-right: 10px;
-  margin-top: 2rem;
+  margin-top: 0.5rem;
   background-color: #3b5998;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.UserBar button:hover {
+  background-color: #354a6c;
 }
 
 .CardContainer {
@@ -163,7 +167,7 @@ body {
   align-items: center;
 }
 
-.Card {
+.CheapestListingCard {
   background-color: #8ea0b1;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-size: 1rem;
@@ -180,7 +184,7 @@ body {
   gap: 0.5rem;
 }
 
-.Card img {
+.CheapestListingCard img {
   width: 100%;
   height: auto;
   border-radius: 10px;
@@ -188,20 +192,20 @@ body {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
-.Card h2 {
+.CheapestListingCard h2 {
   font-weight: 700;
   margin: 0;
   font-size: 1.5rem;
 }
 
-.Card p {
+.CheapestListingCard p {
   font-weight: 500;
   margin: 0;
   font-size: 0.9rem;
   color: #e0e0e0;
 }
 
-.Card a {
+.CheapestListingCard a {
   font-weight: 500;
   font-size: 0.9rem;
   padding: 0.5rem;
@@ -211,6 +215,21 @@ body {
   border-radius: 8px;
 }
 
-.Card a:hover {
+.CheapestListingCard a:hover {
   background-color: #354a6c;
+}
+
+.alertCard {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding-bottom: 1rem;
+}
+
+.addAlertCard{
+  margin-top: 1rem
+}
+
+.addAlertCard input{
+  margin-right: 5px;
+  margin-left: 5px;
 }

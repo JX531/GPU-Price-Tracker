@@ -15,6 +15,7 @@ import useModelData from './hooks/useModelData'
 import useModelCheapest from './hooks/useModelCheapest'
 import usePresentingData from './hooks/usePresentingData'
 
+import useUserAlerts from './hooks/useUserAlerts'
 
 //Auth
 import { useAuth } from "react-oidc-context";
@@ -37,6 +38,8 @@ function App() {
   const {selectedProductData} = useModelData(selectedProduct)
   const {selectedProductCheapest} = useModelCheapest(selectedProduct)
   const {presentingData, timeSpan, setTimeSpan} = usePresentingData(selectedProductData)
+
+  const {userAlerts, setUserAlerts} = useUserAlerts(auth.user?.profile.email || null)
 
   return (
     <div className='App'>
@@ -62,7 +65,7 @@ function App() {
         </div>
 
       </div>
-      <UserBar auth={auth}/>
+      <UserBar models={models} auth={auth} userAlerts={userAlerts} setUserAlerts={setUserAlerts}/>
     </div>
   )
 }

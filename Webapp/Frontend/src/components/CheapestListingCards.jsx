@@ -8,7 +8,7 @@ function CheapestListingCards({selectedProductCheapest}){
     return(
         selectedProductCheapest.slice(0, 3).map((product, index) => (
             <div key={index}>
-                <div className="Card">
+                <div className="CheapestListingCard">
                     <img src={product.ImageLink}></img>
                     <h2>SGD ${product.Price}</h2>
                     <p>{product.Brand} {product.Model} {product.VRAM}GB</p>
