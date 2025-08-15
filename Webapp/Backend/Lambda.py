@@ -33,7 +33,7 @@ def lambda_handler(event, context):
                     "headers": {
                         "Access-Control-Allow-Origin": "*"
                     },
-                    "body": "Missing UserEmail parameter"
+                    "body": json.dumps("Missing UserEmail parameter")
                 }
         
             response = userAlerts.query(KeyConditionExpression=Key("UserEmail").eq(UserEmail))
@@ -53,7 +53,7 @@ def lambda_handler(event, context):
                 "headers": {
                     "Access-Control-Allow-Origin": "*"
                 },
-                "body": str(e)
+                "body": json.dumps(str(e))
             }
 
     elif method == "POST" or method == "PUT":
@@ -76,7 +76,7 @@ def lambda_handler(event, context):
                     "headers": {
                         "Access-Control-Allow-Origin": "*"
                     },
-                    "body": f"Successful {method} for {UserEmail}'s {Model} at ${Price}"
+                    "body": json.dumps(f"Successful {method} for {UserEmail}'s {Model} at ${Price}")
                 }
 
             else:
@@ -85,7 +85,7 @@ def lambda_handler(event, context):
                     "headers": {
                         "Access-Control-Allow-Origin": "*"
                     },
-                    "body": "Missing UserEmail or Model or Price parameter"
+                    "body": json.dumps("Missing UserEmail or Model or Price parameter")
                 }
 
         except Exception as e:
@@ -95,7 +95,7 @@ def lambda_handler(event, context):
                 "headers": {
                     "Access-Control-Allow-Origin": "*"
                 },
-                "body": str(e)
+                "body": json.dumps(str(e))
             }
         
     elif method == "DELETE":
@@ -114,7 +114,7 @@ def lambda_handler(event, context):
                     "headers": {
                         "Access-Control-Allow-Origin": "*"
                     },
-                    "body": f"Successful {method} for {UserEmail}'s {Model}"
+                    "body": json.dumps(f"Successful {method} for {UserEmail}'s {Model}")
                 }
 
             else:
@@ -123,7 +123,7 @@ def lambda_handler(event, context):
                     "headers": {
                         "Access-Control-Allow-Origin": "*"
                     },
-                    "body": "Missing UserEmail or Model parameter"
+                    "body": json.dumps("Missing UserEmail or Model parameter")
                 }
 
         except Exception as e:
@@ -133,7 +133,7 @@ def lambda_handler(event, context):
                 "headers": {
                     "Access-Control-Allow-Origin": "*"
                 },
-                "body": str(e)
+                "body": json.dumps(str(e))
             }
 
     else:
@@ -142,5 +142,5 @@ def lambda_handler(event, context):
                 "headers": {
                     "Access-Control-Allow-Origin": "*"
                 },
-                "body": "Invalid Method"
+                "body": json.dumps("Invalid Method")
             }
