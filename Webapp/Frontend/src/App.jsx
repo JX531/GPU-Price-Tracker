@@ -6,7 +6,7 @@ import UserBar from './components/UserBar'
 import DataTable from './components/DataTable'
 import LineGraph from './components/LineGraph'
 import TimeSpanSelector from './components/TimeSpanSelector'
-
+import { useState, useEffect } from 'react';
 import CheapestListingCards from './components/CheapestListingCards'
 
 //Hooks
@@ -32,7 +32,12 @@ function App() {
   if (auth.error) {
     return <div>Encountering error... {auth.error.message}</div>;
   }
-  //
+  
+  //Clean URL
+  useEffect(() => {
+  if (window.location.search.includes("code=") || window.location.search.includes("state=")) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }}, []);
 
   const {models, selectedProduct, setSelectedProduct} = useModels()
   const {selectedProductData} = useModelData(selectedProduct)

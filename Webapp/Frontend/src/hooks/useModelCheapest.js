@@ -3,13 +3,14 @@ import { cloudfrontLink } from "../../links";
 function useModelCheapest(selectedProduct) {
     const [selectedProductCheapest, setSelectedProductCheapest] = useState([])
 
-    if (!selectedProduct){
-        console.log("useModelCheapest missing selectedProduct")
-        return {selectedProductCheapest}
-    }
-
     //fetch model data once each time selected product is changed
     useEffect(() => {
+
+        if (!selectedProduct){
+            console.log("useModelCheapest missing selectedProduct")
+            return
+        }
+
         fetch(`${cloudfrontLink}/data/dailyCheapest/${selectedProduct}_dailyCheapest.json`)
         .then(res => res.json())
         //convert from object to array for easier data presentation

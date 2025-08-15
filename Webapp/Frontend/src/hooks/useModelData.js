@@ -3,13 +3,14 @@ import { cloudfrontLink } from "../../links";
 function useModelData(selectedProduct) {
     const [selectedProductData, setSelectedProductData] = useState([])
 
-    if (!selectedProduct){
-        console.log("useModelData missing selectedProduct")
-        return {selectedProductData}
-    }
-
     //fetch model data once each time selected product is changed
     useEffect(() => {
+
+        if (!selectedProduct){
+            console.log("useModelData missing selectedProduct")
+            return
+        }
+
         fetch(`${cloudfrontLink}/data/dailyAverages/${selectedProduct}_dailyAverage.json`)
         .then(res => res.json())
         //convert from object to array for easier data presentation

@@ -4,12 +4,13 @@ import getUserAlerts from '../apis/userAlerts/GET';
 function useUserAlerts(userEmail){
     const [userAlerts, setUserAlerts] = useState([])
 
-    if (!userEmail){
-        console.log("useUserAlerts missing userEmail")
-        return {userAlerts, setUserAlerts}
-    }
-
     useEffect(()=>{
+
+        if (!userEmail){
+            console.log("useUserAlerts missing userEmail")
+            return 
+        }
+
         //if logged in, get their alerts
         if (userEmail){
             getUserAlerts(userEmail)
