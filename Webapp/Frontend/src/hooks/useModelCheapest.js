@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import { cloudfrontLink } from "../../links";
 function useModelCheapest(selectedProduct) {
-    
+    const [selectedProductCheapest, setSelectedProductCheapest] = useState([])
+
     if (!selectedProduct){
         console.log("useModelCheapest missing selectedProduct")
-        return []
+        return {selectedProductCheapest}
     }
-
-    const [selectedProductCheapest, setSelectedProductCheapest] = useState([])
 
     //fetch model data once each time selected product is changed
     useEffect(() => {
