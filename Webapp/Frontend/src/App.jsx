@@ -65,7 +65,7 @@ function App() {
           </div>
         </div>
 
-        <div className="CardContainer">
+        <div className="CheapestCardContainer">
             <CheapestListingCards selectedProductCheapest={selectedProductCheapest} />
         </div>
 

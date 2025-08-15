@@ -19,7 +19,7 @@ function AlertCards({models, userEmail, userAlerts, setUserAlerts}){
         putUserAlerts(userEmail, model, price)
         .then(() => {
             setUserAlerts(old => [...old,{"Model": model, "Price": price}])
-            setAddingModel(options[0] || "")
+            setAddingModel("")
         })
         .catch(error => console.log("Error handleAdd: ", error))
     }
@@ -42,13 +42,15 @@ function AlertCards({models, userEmail, userAlerts, setUserAlerts}){
         .catch(error => console.log("Error handleDelete: ", error))
     }
 
-    if (userAlerts.length == 0){
-        return (
+
+    return (
+        <div>
             <div>
-                <div>No Alerts Set...</div>
-        
-                <div className='addAlertCard'>
-                    <select onChange={(e) => setAddingModel(e.target.value)} defaultValue={""}>
+                
+                <h2 style={{textDecoration: "underline", marginTop: "5rem"}}>Alerts Set</h2>
+                
+                <div className='AddAlertCard'>
+                    <select onChange={(e) => {setAddingModel(e.target.value)}} value={addingModel}>
                         <option value={""}>Select</option>
                         {options.map(model => (
                             <option value={model}>{model}</option>
@@ -57,51 +59,57 @@ function AlertCards({models, userEmail, userAlerts, setUserAlerts}){
                     <input type='number' value={addingPrice} onChange={e => setAddingPrice(Number(e.target.value))}/>
                     <button onClick={() => handleAdd(addingModel, addingPrice)}>Add</button>
                 </div>
+
             </div>
-        )
-    }
 
-    return (
-        <div>
-            <h2 style={{textDecoration: "underline", marginTop: "5rem"}}>Alerts Set</h2>
+            <div className='AlertCardContainer'>
 
-            {userAlerts.map(alert => {
-                const editMode = alert.Model == edittingModel
-                const deleteMode = alert.Model == deletingModel
-                return(
-                    <div>
-                        <div key={alert.Model} className='alertCard'>
-                            <h3>{alert.Model}</h3>
+                {userAlerts.length == 0 ? //Is the userAlerts array empty?
+                (<div style={{marginTop: "1rem"}}>No Alerts Set...</div>) //No models to show, just show a "No Alerts Set" text
+                : 
+                userAlerts.map(alert => {//Theres alerts, so map them and show a card for each
 
-                            {editMode ? 
-                            (<input type='number' value={edittingPrice} onChange={e => setEdittingPrice(Number(e.target.value))}/>)
-                            : 
-                            (<p>${alert.Price}</p>)
-                            }
+                    //Setting Edit Mode or Delete Mode for the current model
+                    //Done by checking if edittingModel or deletingModel is set to current model
+                    const editMode = alert.Model == edittingModel
+                    const deleteMode = alert.Model == deletingModel
 
-                            {editMode ? 
-                            (<div><button onClick={() => {edittingPrice != alert.Price ? handleEdit(alert.Model, edittingPrice) : setEdittingModel("")}}>Confirm Edit</button> <button onClick={() => {setEdittingModel("")}}>Cancel</button></div>)
-                            : 
-                            deleteMode ?
-                            (<div><button onClick={() => {handleDelete(alert.Model)}}>Confirm Delete</button> <button onClick={() => {setDeletingModel("")}}>Cancel</button></div>)
-                            :
-                            (<div><button onClick={() => {setEdittingModel(alert.Model); setEdittingPrice(alert.Price)}}>Edit</button> <button onClick={() => {setDeletingModel(alert.Model)}}>Delete</button></div>)
-                            }
+                    return(
+                        <div>
+                            <div key={alert.Model} className='AlertCard'>
+                                <h3>{alert.Model}</h3>
 
+                                {/* PRICE DISPLAY */}
+                                {editMode ? //Is editMode enabled for current Model?
+
+                                //In Editting Mode, transform the price display into an input box
+                                (<input type='number' value={edittingPrice} onChange={e => setEdittingPrice(Number(e.target.value))}/>) 
+                                : 
+                                //Not in Editting Mode, just display the price
+                                (<p>${alert.Price}</p>) 
+                                }
+                                
+                                {/* BUTTONS BELOW PRICE */}
+                                {editMode ? //Is editMode enabled for current Model?
+
+                                //In Editting Mode, the buttons become "Confirm Edit" and "Cancel". "Confirm Edit" checks if new price != old price, then calls handleEdit, otherwise it just resets edittingModel. Cancel just resets edittingModel.
+                                (<div><button onClick={() => {edittingPrice != alert.Price ? handleEdit(alert.Model, edittingPrice) : setEdittingModel("")}}>Confirm Edit</button> <button onClick={() => {setEdittingModel("")}}>Cancel</button></div>)
+                                : 
+                                //Not in Editting Mode, check if in Delete Mode
+                                deleteMode ? //Is deleteMode enabled for current Model?
+
+                                //In Delete Mode, the buttons become "Confirm Delete" and "Cancel". "Confirm Delete" calls handleDelete, "Cancel" just resets deletingModel.
+                                (<div><button onClick={() => {handleDelete(alert.Model)}}>Confirm Delete</button> <button onClick={() => {setDeletingModel("")}}>Cancel</button></div>)
+                                :
+                                //Not in Edit Mode and not in Delete Mode, this is the default button display with "Edit" and "Delete" options. Each button will enable their respective mode for the current model.
+                                (<div><button onClick={() => {setEdittingModel(alert.Model); setEdittingPrice(alert.Price)}}>Edit</button> <button onClick={() => {setDeletingModel(alert.Model)}}>Delete</button></div>)
+                                }
+
+                            </div>
                         </div>
-                    </div>
-                )
-            })}
-            
-            <div className='addAlertCard'>
-                <select onChange={(e) => setAddingModel(e.target.value)} defaultValue={""}>
-                    <option value={""}>Select</option>
-                    {options.map(model => (
-                        <option value={model}>{model}</option>
-                    ))}
-                </select>
-                <input type='number' value={addingPrice} onChange={e => setAddingPrice(Number(e.target.value))}/>
-                <button onClick={() => handleAdd(addingModel, addingPrice)}>Add</button>
+                    )
+                })}
+
             </div>
         </div>
     );
