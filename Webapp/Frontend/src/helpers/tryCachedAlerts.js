@@ -2,7 +2,7 @@ function tryCachedAlerts(userEmail){
     if (!userEmail){
         return 
     }
-    
+
     const cacheExists = localStorage.getItem('userAlerts')
     if (cacheExists){
         try{

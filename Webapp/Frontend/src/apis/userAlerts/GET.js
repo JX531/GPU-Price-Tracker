@@ -1,5 +1,7 @@
 import { apiLink } from "../../../links"
 import tryCachedAlerts from "../../helpers/tryCachedAlerts"
+import updateCachedAlerts from "../../helpers/updateCachedAlerts"
+
 async function getUserAlerts(userEmail) {
 
     let cache = tryCachedAlerts(userEmail)
@@ -19,7 +21,11 @@ async function getUserAlerts(userEmail) {
         })
 
         console.log("Loaded userAlerts from API fetch instead")
-        return res.json()
+
+        let data = await res.json()
+        updateCachedAlerts(data, userEmail)
+        
+        return data
     } 
 
     catch(error){

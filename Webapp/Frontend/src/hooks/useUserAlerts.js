@@ -6,10 +6,6 @@ function useUserAlerts(userEmail){
     const [userAlerts, setUserAlerts] = useState(tryCachedAlerts(userEmail) || [])
 
     useEffect(()=>{
-        localStorage.setItem('userAlerts', JSON.stringify({"Data": userAlerts, "TimeStamp": Date.now(), "Email": userEmail}));
-    }, [userAlerts])
-
-    useEffect(()=>{
 
         if (!userEmail){
             console.log("useUserAlerts missing userEmail")
@@ -17,14 +13,10 @@ function useUserAlerts(userEmail){
         }
 
         //if logged in, get their alerts
-        if (userEmail){
-            getUserAlerts(userEmail)
-            .then(res => setUserAlerts(res || []))
-            .catch(error => console.log("useUserAlerts failed, error: ", error))
-        }
+        getUserAlerts(userEmail)
+        .then(res => setUserAlerts(res || []))
+        .catch(error => console.log("useUserAlerts failed, error: ", error))
         
-        //else if logged out, clear
-        else setUserAlerts([])
 
     }, [userEmail])
 

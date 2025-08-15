@@ -2,6 +2,7 @@ import '../App.css'
 import { useState, useEffect } from 'react';
 import putUserAlerts from '../apis/userAlerts/PUT'
 import delUserAlerts from '../apis/userAlerts/DEL'
+import updateCachedAlerts from '../helpers/updateCachedAlerts';
 
 function AlertCards({models, userEmail, userAlerts, setUserAlerts}){
     const options = models.filter(model => !(userAlerts|| []).some(alert  => alert.Model == model))
@@ -19,6 +20,7 @@ function AlertCards({models, userEmail, userAlerts, setUserAlerts}){
         putUserAlerts(userEmail, model, price)
         .then(() => {
             setUserAlerts(old => [...old,{"Model": model, "Price": price}])
+            updateCachedAlerts(userAlerts,userEmail)
             setAddingModel("")
         })
         .catch(error => console.log("Error handleAdd: ", error))
@@ -28,6 +30,7 @@ function AlertCards({models, userEmail, userAlerts, setUserAlerts}){
         putUserAlerts(userEmail, model, newPrice)
         .then(() => {
             setUserAlerts(old => old.map(item => item.Model == model ? {...item, "Price": newPrice} : item))
+            updateCachedAlerts(userAlerts,userEmail)
             setEdittingModel("")
         })
         .catch(error => console.log("Error handleEdit: ", error))
@@ -37,7 +40,9 @@ function AlertCards({models, userEmail, userAlerts, setUserAlerts}){
         delUserAlerts(userEmail, model)
         .then(() => {
             setUserAlerts(old => old.filter(item => item.Model != model))
+            updateCachedAlerts(userAlerts,userEmail)
             setDeletingModel("")
+            
         })
         .catch(error => console.log("Error handleDelete: ", error))
     }
