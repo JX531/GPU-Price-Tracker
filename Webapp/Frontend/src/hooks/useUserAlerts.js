@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
 import getUserAlerts from '../apis/userAlerts/GET';
+import tryCachedAlerts from '../helpers/tryCachedAlerts';
 
 function useUserAlerts(userEmail){
-    const [userAlerts, setUserAlerts] = useState([])
+    const [userAlerts, setUserAlerts] = useState(tryCachedAlerts(userEmail) || [])
+
+    useEffect(()=>{
+        localStorage.setItem('userAlerts', JSON.stringify({"Data": userAlerts, "TimeStamp": Date.now(), "Email": userEmail}));
+    }, [userAlerts])
 
     useEffect(()=>{
 
