@@ -63,12 +63,13 @@ function AlertCards({models, userEmail, userAlerts, setUserAlerts}){
 
     return (
         <div>
+            <h2 style={{textDecoration: "underline", marginTop: "5rem"}}>Alerts Set</h2>
+
             {userAlerts.map(alert => {
                 const editMode = alert.Model == edittingModel
                 const deleteMode = alert.Model == deletingModel
                 return(
                     <div>
-                        <h2 style={{textDecoration: "underline", marginTop: "5rem"}}>Alerts Set</h2>
                         <div key={alert.Model} className='alertCard'>
                             <h3>{alert.Model}</h3>
 
@@ -88,20 +89,20 @@ function AlertCards({models, userEmail, userAlerts, setUserAlerts}){
                             }
 
                         </div>
-
-                        <div className='addAlertCard'>
-                            <select onChange={(e) => setAddingModel(e.target.value)} defaultValue={""}>
-                                <option value={""}>Select</option>
-                                {options.map(model => (
-                                    <option value={model}>{model}</option>
-                                ))}
-                            </select>
-                            <input type='number' value={addingPrice} onChange={e => setAddingPrice(Number(e.target.value))}/>
-                            <button onClick={() => handleAdd(addingModel, addingPrice)}>Add</button>
-                        </div>
                     </div>
                 )
             })}
+            
+            <div className='addAlertCard'>
+                <select onChange={(e) => setAddingModel(e.target.value)} defaultValue={""}>
+                    <option value={""}>Select</option>
+                    {options.map(model => (
+                        <option value={model}>{model}</option>
+                    ))}
+                </select>
+                <input type='number' value={addingPrice} onChange={e => setAddingPrice(Number(e.target.value))}/>
+                <button onClick={() => handleAdd(addingModel, addingPrice)}>Add</button>
+            </div>
         </div>
     );
 }
