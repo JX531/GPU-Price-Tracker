@@ -6,7 +6,7 @@ function tryCachedAlerts(userEmail){
     const cacheExists = localStorage.getItem('userAlerts')
     if (cacheExists){
         try{
-            let cachedAlerts = JSON.parse(cacheExists)
+            const cachedAlerts = JSON.parse(cacheExists)
             if ((Date.now() - cachedAlerts.TimeStamp) < (5 * 60 * 1000) && cachedAlerts.Email === userEmail){
                 return cachedAlerts.Data
             }

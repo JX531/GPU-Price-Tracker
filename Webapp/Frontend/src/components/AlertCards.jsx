@@ -19,8 +19,11 @@ function AlertCards({models, userEmail, userAlerts, setUserAlerts}){
         
         putUserAlerts(userEmail, model, price)
         .then(() => {
-            setUserAlerts(old => [...old,{"Model": model, "Price": price}])
-            updateCachedAlerts(userAlerts,userEmail)
+            setUserAlerts(old => {
+                const updatedAlerts = [...old,{"Model": model, "Price": price}]
+                updateCachedAlerts(updatedAlerts,userEmail)
+                return updatedAlerts
+            })
             setAddingModel("")
         })
         .catch(error => console.log("Error handleAdd: ", error))
@@ -29,8 +32,11 @@ function AlertCards({models, userEmail, userAlerts, setUserAlerts}){
     const handleEdit = (model, newPrice) => {
         putUserAlerts(userEmail, model, newPrice)
         .then(() => {
-            setUserAlerts(old => old.map(item => item.Model == model ? {...item, "Price": newPrice} : item))
-            updateCachedAlerts(userAlerts,userEmail)
+            setUserAlerts(old => {
+                const updatedAlerts = old.map(item => item.Model == model ? {...item, "Price": newPrice} : item)
+                updateCachedAlerts(updateCachedAlerts,userEmail)
+                return updatedAlerts
+            })
             setEdittingModel("")
         })
         .catch(error => console.log("Error handleEdit: ", error))
@@ -39,10 +45,12 @@ function AlertCards({models, userEmail, userAlerts, setUserAlerts}){
     const handleDelete = (model) => {
         delUserAlerts(userEmail, model)
         .then(() => {
-            setUserAlerts(old => old.filter(item => item.Model != model))
-            updateCachedAlerts(userAlerts,userEmail)
+            setUserAlerts(old => {
+                const updatedAlerts = old.filter(item => item.Model != model)
+                updateCachedAlerts(updatedAlerts, userEmail)
+                return updatedAlerts
+            })
             setDeletingModel("")
-            
         })
         .catch(error => console.log("Error handleDelete: ", error))
     }

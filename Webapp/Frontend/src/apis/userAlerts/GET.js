@@ -4,7 +4,7 @@ import updateCachedAlerts from "../../helpers/updateCachedAlerts"
 
 async function getUserAlerts(userEmail) {
 
-    let cache = tryCachedAlerts(userEmail)
+    const cache = tryCachedAlerts(userEmail)
     if (cache){
         console.log("Loaded userAlerts from local storage cache: ", cache)
         return cache
@@ -22,7 +22,7 @@ async function getUserAlerts(userEmail) {
 
         console.log("Loaded userAlerts from API fetch instead")
 
-        let data = await res.json()
+        const data = await res.json()
         updateCachedAlerts(data, userEmail)
         
         return data
