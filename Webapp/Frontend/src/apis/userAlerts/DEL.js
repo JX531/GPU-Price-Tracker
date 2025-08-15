@@ -1,6 +1,6 @@
 import { apiLink } from "../../../links"
 
-async function delUserAlerts(userEmail, model, price) {
+async function delUserAlerts(userEmail, model) {
     const url = new URL(apiLink)
 
     try{
