@@ -1,0 +1,34 @@
+name: Deploy Lambda Scraper
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Scraper/**' 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+    
+    - name: Zip Lambda Function
+      run: |
+        cd Scraper
+        pip install -r requirements.txt -t .
+        zip Lambda_Function.zip .
+
+    - name: Deploy Lambda Function
+      run: |
+        aws lambda update-function-code \
+          --function-name GPU-Scraper \
+          --zip-file fileb://Scraper/Lambda_Function.zip
