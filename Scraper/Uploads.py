@@ -9,18 +9,11 @@ import logging
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-
-#DynamoDB
-dynamodb = boto3.resource('dynamodb')
-
 #S3
 s3 = boto3.client('s3')
 
 #Bucket
 S3Bucket = os.environ['S3_BUCKET']
-
-#Tables
-cheapestDaily = dynamodb.Table(os.environ['DAILY_CHEAPEST_TABLE'])
 
 #Decimal to float encoder for jsons
 class DecimalToFloat(json.JSONEncoder):
@@ -48,7 +41,7 @@ def uploadDailyAverage(Model, dailyModelData, Today):
         return
 
     else:
-        AvgPrice = float(str(round(sum(item["Price"] for item in dailyModelData) / NumListings, 2))) #calculate average price, converted to decimal for dynamoDB
+        AvgPrice = float(str(round(sum(item["Price"] for item in dailyModelData) / NumListings, 2))) #calculate average price
 
     #Update S3 Json
     try: 
@@ -91,7 +84,7 @@ def uploadDailyAverage(Model, dailyModelData, Today):
 
 def uploadRawListings(Model, dailyModelData, Today):
     '''
-    Uploads the cheapest 3 listings for the model for today to DynamoDB table
+    Uploads the cheapest 3 listings for the model for today to their respective S3 Bucket
     Input :
     Model - String, which model you are uploading for e.g "RTX 5070 TI"
     daikyModelData - Array of objects containing product data, from functions in Amazon.py scraper,
@@ -109,27 +102,6 @@ def uploadRawListings(Model, dailyModelData, Today):
     else:
         dailyModelData.sort(key=lambda item: item["Price"]) #Sort by Price, ascending
         cheapest3 = dailyModelData[:3] #slice the cheapest 3 from array
-        expiry = int(datetime.now(ZoneInfo("Asia/Singapore")).timestamp()) + (24 * 3600) #calculate TTL, using SG timezone
-
-        #Update DynamoDB Table
-        try: #upload with batch writer
-            with cheapestDaily.batch_writer() as batch:
-                for item in cheapest3:
-                    batch.put_item(
-                        Item={
-                            'Model': Model,
-                            'Brand': item['Brand'],
-                            'VRAM': item['VRAM'],
-                            'Price': Decimal(str(item['Price'])),
-                            'DateLink': '#'.join([Today, item['Link']]),
-                            'Title': item['Title'][:500],
-                            'Expiry': expiry
-                        }
-                    )
-            logger.info(f"Uploaded cheapest daily to DynamoDB for {cheapest3[0]['Model']} on {Today}")
-
-        except Exception as e:
-            logger.error(f"Error uploading cheapest daily to DynamoDB for {Model} on {Today}: {e}")
         
         #Update S3 jsons
         try:
