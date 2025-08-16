@@ -30,7 +30,7 @@ jobs:
       run: |
         cd Scraper
         pip install -r requirements.txt -t .
-        zip Lambda_Function.zip .
+        zip -r Lambda_Function.zip .
 
     - name: Deploy Lambda Function
       run: |
