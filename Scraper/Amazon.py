@@ -66,8 +66,9 @@ def processLinks(links, session, referer=None):
             productPage.raise_for_status()
             productSoup = bs(productPage.content, 'html.parser')
 
-            price = productSoup.find("span", attrs={"class": "aok-offscreen"})
-            if price is None:
+            priceWhole = productSoup.find("span", attrs={"class": "a-price-whole"})
+            priceFraction = productSoup.find("span", attrs={"class": "a-price-fraction"})
+            if priceWhole is None or priceFraction is None:
                 continue
 
             table = productSoup.find('table', attrs={"class": "a-normal a-spacing-micro"})
@@ -97,7 +98,10 @@ def processLinks(links, session, referer=None):
             if data["Model"] and data["VRAM"]:
                 title = productSoup.find("span", attrs={"class": "a-size-large product-title-word-break"}).get_text(strip=True)
 
-                cleanedPrice = re.sub(r'[^\d.]', '', price.get_text(strip=True)) #remove non digits from price string
+                cleanedPriceWhole = re.sub(r'[^\d]', '', priceWhole.get_text(strip=True)) #remove non digits from price strings
+                cleanedPriceFraction = re.sub(r'[^\d]', '', priceFraction.get_text(strip=True))
+                cleanedPrice = ".".join([cleanedPriceWhole, cleanedPriceFraction])
+                
                 data['Price'] = round(float(cleanedPrice), 2) #convert to float 2dp
 
                 data['Link'] = shorten(productLink)
