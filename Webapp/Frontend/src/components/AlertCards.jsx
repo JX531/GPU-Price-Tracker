@@ -59,9 +59,7 @@ function AlertCards({models, userEmail, userAlerts, setUserAlerts}){
     return (
         <div>
             <div>
-                
-                <h2 style={{textDecoration: "underline", marginTop: "5rem"}}>Alerts Set</h2>
-                
+                <span style={{textDecoration: "underline", marginTop: "1rem"}}>Alerts Set</span>          
                 <div className='AddAlertCard'>
                     <select onChange={(e) => {setAddingModel(e.target.value)}} value={addingModel}>
                         <option value={""}>Select</option>

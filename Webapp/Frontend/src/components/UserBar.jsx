@@ -11,17 +11,19 @@ function UserBar({models, auth, userAlerts, setUserAlerts}){
     if (auth.isAuthenticated){
         return(
             <div className='UserBar'>
-                <div>
-                    <pre> Hello: {auth.user?.profile.email} </pre>
+                <div className='UserInfo'>
+                    <span style={{marginTop: "1rem" }}> Welcome Back </span>
+                    <span style={{marginTop: "1rem" }}> {auth.user?.profile.email} </span>
                     {/* <pre> ID Token: {auth.user?.id_token.slice(-20)} </pre>
                     <pre> Access Token: {auth.user?.access_token.slice(-20)} </pre>
                     <pre> Refresh Token: {auth.user?.refresh_token.slice(-20)} </pre> */}
                     <button onClick={handleLogout}>Log Out</button>
 
-                    <p style={{ fontSize: "0.75rem", color: "#666", marginTop: "0.5rem" }}> 
+                    <p style={{ fontSize: "0.75rem", color: "#666" }}> 
                         Notice : No SES production access, alerts currently only work for email addresses verified by my SES account
                     </p>
-                    
+                </div>
+                <div>
                     <AlertCards models={models} userEmail={auth.user?.profile.email} userAlerts={userAlerts} setUserAlerts={setUserAlerts}/> 
                 </div>
             </div>

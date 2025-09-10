@@ -125,7 +125,6 @@ body {
   width: 15vw;
   background-color: #2F4050;
   flex-shrink: 0;
-
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-size: large;
   color: white;
@@ -226,15 +225,16 @@ body {
 .AlertCardContainer {
   overflow-y: auto;
   max-height: 65vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .AlertCard {
   border: 1px solid black;
   border-radius: 10px;
-  padding-bottom: 1rem;
-  margin-top: 1rem;
-  margin-left: 3rem;
-  margin-right: 3rem;
+  padding:1rem;
+  margin-bottom: 1rem;
   background-color: #a9a9a9;
 }
 
@@ -242,7 +242,20 @@ body {
   font-size: x-large;
 }
 
-.AddAlertCard input{
-  margin-right: 5px;
-  margin-left: 5px;
+.AddAlertCard {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.AddAlertCard input {
+  margin: 0 5px;   
+  flex: 1;       
+  min-width: 0;  
+}
+
+.UserInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
