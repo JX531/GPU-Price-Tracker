@@ -65,7 +65,9 @@ body {
 }
 
 .DataContainer {
-  width: 65%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .ChartContainer {
@@ -160,8 +162,8 @@ body {
 
 .CheapestCardContainer {
   margin-top: 1rem;
-  margin-left: 5rem;
-  width: 25%;
+  margin-left: 1rem;
+  width: 35%;
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
@@ -176,8 +178,7 @@ body {
   font-size: 1rem;
   color: white;
   text-align: center;
-  width: 100%;
-  max-width: 320px;
+  max-width: 90%;
   padding: 1rem;
   margin-top: 1rem;
   border-radius: 10px;
