@@ -57,7 +57,7 @@ function AlertCards({models, userEmail, userAlerts, setUserAlerts}){
 
 
     return (
-        <div>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight:'0', overflow:'hidden'}}>
             <div>
                 <span style={{textDecoration: "underline", marginTop: "1rem"}}>Alerts Set</span>          
                 <div className='AddAlertCard'>
@@ -88,7 +88,7 @@ function AlertCards({models, userEmail, userAlerts, setUserAlerts}){
                     return(
                         <div>
                             <div key={alert.Model} className='AlertCard'>
-                                <h3>{alert.Model}</h3>
+                                <p>{alert.Model}</p>
 
                                 {/* PRICE DISPLAY */}
                                 {editMode ? //Is editMode enabled for current Model?

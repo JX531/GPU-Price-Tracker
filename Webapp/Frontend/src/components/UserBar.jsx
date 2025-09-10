@@ -23,9 +23,9 @@ function UserBar({models, auth, userAlerts, setUserAlerts}){
                         Notice : No SES production access, alerts currently only work for email addresses verified by my SES account
                     </p>
                 </div>
-                <div>
-                    <AlertCards models={models} userEmail={auth.user?.profile.email} userAlerts={userAlerts} setUserAlerts={setUserAlerts}/> 
-                </div>
+
+                <AlertCards models={models} userEmail={auth.user?.profile.email} userAlerts={userAlerts} setUserAlerts={setUserAlerts}/> 
+
             </div>
         )
     }
