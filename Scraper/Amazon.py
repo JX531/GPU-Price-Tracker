@@ -26,17 +26,17 @@ HEADERS = {
     "DNT": "1",
 }
 
-def get_headers():
+def getHeaders():
     return {
         **HEADERS,
         "User-Agent": random.choice(USER_AGENTS)
     }
 referer = None
 
-def findProduct(productName, limit = 10): #Takes in a string productName to search
+def findProduct(productName, limit = 20): #Takes in a string productName to search
     #Headers and URL
     with rq.Session() as session:
-        session.headers.update(get_headers())
+        session.headers.update(getHeaders())
         URL = f"https://www.amazon.sg/s?k=\"{str(productName)}\""
 
         #Get Webpage soup
@@ -55,13 +55,16 @@ def processLinks(links, session, referer=None):
     productInfos = []
     seen_links = [] #to remove duplicate listings by their link
     for link in links:
-        time.sleep(random.uniform(1, 3))
         href = link.get('href') 
         if href is None:
             continue
 
         try:
-            productLink = f'https://www.amazon.sg{href}'
+            productLink = shorten(f'https://www.amazon.sg{href}')
+            if productLink in seen_links:
+                continue
+            
+            session.headers.update(getHeaders())
             productPage = session.get(productLink, headers={'Referer': referer})
             productPage.raise_for_status()
             productSoup = bs(productPage.content, 'html.parser')
@@ -104,7 +107,7 @@ def processLinks(links, session, referer=None):
                 
                 data['Price'] = round(float(cleanedPrice), 2) #convert to float 2dp
 
-                data['Link'] = shorten(productLink)
+                data['Link'] = productLink
                 
                 data['Title'] = title
 
@@ -115,9 +118,8 @@ def processLinks(links, session, referer=None):
                 else:
                     data["ImageLink"] = None
 
-                if data['Link'] not in seen_links:
-                    seen_links.append(data['Link'])
-                    productInfos.append(data)
+                seen_links.append(data['Link'])
+                productInfos.append(data)
             
         except Exception as e:
             logger.error(f"Error processing {href}: {str(e)}")
